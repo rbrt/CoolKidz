@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 
 Project("{6524C17C-4D1B-59B1-1E80-DE5B8A156C87}") = "CoolKids", "Assembly-CSharp-vs.csproj", "{CE10E774-7E0D-76D9-0880-3A5FE7051511}"
 EndProject
+Project("{6524C17C-4D1B-59B1-1E80-DE5B8A156C87}") = "CoolKids", "Assembly-CSharp-Editor-vs.csproj", "{4BA72BAA-461E-AAAA-9615-C123B429A60A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,11 +15,15 @@ Global
 		{CE10E774-7E0D-76D9-0880-3A5FE7051511}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE10E774-7E0D-76D9-0880-3A5FE7051511}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE10E774-7E0D-76D9-0880-3A5FE7051511}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BA72BAA-461E-AAAA-9615-C123B429A60A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BA72BAA-461E-AAAA-9615-C123B429A60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BA72BAA-461E-AAAA-9615-C123B429A60A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BA72BAA-461E-AAAA-9615-C123B429A60A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-			GlobalSection(MonoDevelopProperties) = preSolution
+				GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
