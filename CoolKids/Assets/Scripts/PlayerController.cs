@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour {
 				 shooting,
 				 walking;
 
+	private const float sideSpeed = 10f,
+						forwardSpeed = 10f;
+
 	private bool Walking{
 		get{
 			return walking;
@@ -56,6 +59,8 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void HandleInput(){
+		var pos = transform.localPosition;
+
 		if (Input.GetKeyDown(KeyCode.UpArrow)){
 			holdingUp = true;
 			holdingDown = false;
@@ -125,17 +130,19 @@ public class PlayerController : MonoBehaviour {
 		Shooting = holdingShoot;
 
 		if (holdingLeft){
-			// Move Left
+			pos.z += Time.deltaTime * sideSpeed;
 		}
 		else if (holdingRight){
-			// Move Right
+			pos.z -= Time.deltaTime * sideSpeed;
 		}
 
 		if (holdingUp){
-			// Move Forward
+			pos.x += Time.deltaTime * forwardSpeed;
 		}
 		else if (holdingDown){
-			// Move Backward
+			pos.x -= Time.deltaTime * forwardSpeed;
 		}
+
+		transform.localPosition = pos;
 	}
 }
