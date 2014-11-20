@@ -165,6 +165,7 @@
      <Compile Include="Assets\InControl\Source\XInput\XInputDotNetPure\Utils.cs" />
      <Compile Include="Assets\InControl\Test\TestInputManager.cs" />
      <Compile Include="Assets\Scripts\CubeMapCamera.cs" />
+     <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\PlayerShoot.cs" />
      <None Include="Assets\InControl\Readme\README.txt" />
  <Reference Include="UnityEngine.UI">
