@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour {
 	private const float sideSpeed = 10f,
 						forwardSpeed = 10f;
 
+
+
 	private bool Walking{
 		get{
 			return walking;
@@ -48,10 +50,6 @@ public class PlayerController : MonoBehaviour {
 			}
 			shooting = value;
 		}
-	}
-
-	void Start () {
-
 	}
 
 	void Update () {
@@ -145,4 +143,5 @@ public class PlayerController : MonoBehaviour {
 
 		transform.localPosition = pos;
 	}
+
 }
