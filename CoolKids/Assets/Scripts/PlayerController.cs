@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
 	[SerializeField] protected Animator animator;
+	[SerializeField] protected PlayerShoot playerShoot;
 
 	private bool holdingUp,
 				 holdingDown,
@@ -47,6 +48,7 @@ public class PlayerController : MonoBehaviour {
 		set{
 			if (value != shooting){
 				animator.SetBool("ShootBool", value);
+				playerShoot.SetShooting(value);
 			}
 			shooting = value;
 		}

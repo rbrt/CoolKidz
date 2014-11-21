@@ -15,11 +15,8 @@ public class CubeMapCamera : MonoBehaviour {
 	private RenderTexture rtex;
 
 	void Start () {
-		Debug.Log(instance, gameObject);
-
 		instance = true;
 
-		// render all six faces at startup
 		if (instance){
 			StartCoroutine(UpdateCubemap( 63 ));
 		}
@@ -31,22 +28,19 @@ public class CubeMapCamera : MonoBehaviour {
 			var faceToRender = Time.frameCount % 6;
 			var faceMask = 1 << faceToRender;
 			StartCoroutine(UpdateCubemap (faceMask));
-		} else {
-			StartCoroutine(UpdateCubemap (63)); // all six faces
+		}
+		else {
+			StartCoroutine(UpdateCubemap (63));
 		}
 	}
 
 	IEnumerator UpdateCubemap (int faceMask) {
 		if (!cam) {
 			GameObject go = new GameObject("CubemapCamera", typeof(Camera));
-			//go.hideFlags = HideFlags.HideAndDontSave;
 			go.transform.position = orientationTransform.position;
 			go.transform.rotation = orientationTransform.rotation;
 			cam = go.GetComponent<Camera>();
-			cam.farClipPlane = 100; // don't render very far into cubemap
-			//cam.enabled = false;
-
-			Debug.Log("jappens?", cam);
+			cam.farClipPlane = 100;
 		}
 
 		if (!rtex) {
