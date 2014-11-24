@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour {
 
 	[SerializeField] protected Animator animator;
 	[SerializeField] protected PlayerShoot playerShoot;
+	[SerializeField] protected GameObject coolCamera;
 
 	private bool holdingUp,
 				 holdingDown,
@@ -20,8 +21,6 @@ public class PlayerController : MonoBehaviour {
 
 	private const float sideSpeed = 10f,
 						forwardSpeed = 10f;
-
-
 
 	private bool Walking{
 		get{
@@ -95,6 +94,9 @@ public class PlayerController : MonoBehaviour {
 		}
 		else if (Input.GetKeyDown(KeyCode.Space)){
 			holdingShoot = true;
+		}
+		else if (Input.GetKeyDown(KeyCode.C)){
+			coolCamera.SetActive(!coolCamera.activeSelf);
 		}
 
 		if (Input.GetKeyUp(KeyCode.UpArrow)){
