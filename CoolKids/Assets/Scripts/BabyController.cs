@@ -12,19 +12,21 @@ public class BabyController : MonoBehaviour {
 
 	bool dead;
 
+	public bool inGame = true;
+
 	// Use this for initialization
 	void Start () {
 		player = PlayerController.Instance;
 		animator = GetComponent<Animator>();
 
-		animator.SetBool("seesPlayer", true);
+		animator.SetBool("seesPlayer", inGame);
 
 		dead = false;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if (!dead){
+		if (!dead && player != null){
 			transform.LookAt(player.transform, Vector3.up);
 			var rotation = transform.rotation;
 			rotation.x = 0;
