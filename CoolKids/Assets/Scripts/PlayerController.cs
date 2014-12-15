@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour {
 	private const float sideSpeed = 10f,
 						forwardSpeed = 10f;
 
-	public float XSensitivity = .1f;
+	public float XSensitivity = .01f;
 	public float YSensitivity = 1f;
 	public bool clampVerticalRotation = true;
 	float MinimumX = -10F;
@@ -32,12 +32,26 @@ public class PlayerController : MonoBehaviour {
 	public bool smooth;
 	public float smoothTime = 5f;
 
+	bool initialized = false;
+
 	private Quaternion characterTargetRot;
 	private Quaternion m_CameraTargetRot;
 
+	static GameObject playerObject;
+
+	void Awake(){
+		playerObject = this.gameObject;
+	}
+
 	void Start(){
+		Cursor.visible = false;
 		characterTargetRot = transform.localRotation;
 		m_CameraTargetRot = playerCamera.localRotation;
+		initialized = true;
+	}
+
+	public static GameObject Instance{
+		get { return playerObject; }
 	}
 
 	private bool Walking{
@@ -72,6 +86,10 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update () {
+		if (!initialized){
+			return;
+		}
+
 		HandleInput();
 	}
 
@@ -113,7 +131,7 @@ public class PlayerController : MonoBehaviour {
 			holdingTurnRight = true;
 			holdingTurnLeft = false;
 		}
-		else if (Input.GetKeyDown(KeyCode.Space)){
+		else if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0)){
 			holdingShoot = true;
 		}
 		else if (Input.GetKeyDown(KeyCode.C)){
@@ -144,7 +162,7 @@ public class PlayerController : MonoBehaviour {
 		else if (Input.GetKeyUp(KeyCode.D)){
 			holdingTurnRight = false;
 		}
-		else if (Input.GetKeyUp(KeyCode.Space)){
+		else if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Mouse0)){
 			holdingShoot = false;
 		}
 
@@ -175,15 +193,17 @@ public class PlayerController : MonoBehaviour {
 
 		characterTargetRot *= Quaternion.Euler (0f, yRot, 0f);
 
-
-		//m_CameraTargetRot *= Quaternion.Euler (-xRot, 0f, 0f);
 		var eulerAngles = m_CameraTargetRot.eulerAngles;
-		eulerAngles.x += xRot;
-		m_CameraTargetRot = Quaternion.Euler(eulerAngles);
+		eulerAngles.x -= xRot;
 
-		if(clampVerticalRotation){
-		    //m_CameraTargetRot = ClampXRotation(m_CameraTargetRot);
+		if (eulerAngles.x > 300 && eulerAngles.x < 350){
+			eulerAngles.x = 350;
 		}
+		else if (eulerAngles.x > 15 && eulerAngles.x < 60){
+			eulerAngles.x = 15;
+		}
+
+		m_CameraTargetRot = Quaternion.Euler(eulerAngles);
 
 		if(smooth) {
 			transform.localRotation = Quaternion.Slerp (transform.localRotation, characterTargetRot,
