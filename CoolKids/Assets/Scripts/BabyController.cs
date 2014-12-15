@@ -56,5 +56,9 @@ public class BabyController : MonoBehaviour {
 			dead = true;
 			animator.SetBool("dead", true);
 		}
+
+		var pos = transform.position;
+		pos += -transform.forward * 100 * Time.deltaTime;
+		transform.position = pos;
 	}
 }
