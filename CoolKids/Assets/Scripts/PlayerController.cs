@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField] protected PlayerShoot playerShoot;
 	[SerializeField] protected GameObject coolCamera;
 	[SerializeField] protected Transform playerTorso;
+	[SerializeField] protected Transform playerCamera;
 
 	private bool holdingUp,
 				 holdingDown,
@@ -23,18 +24,20 @@ public class PlayerController : MonoBehaviour {
 	private const float sideSpeed = 10f,
 						forwardSpeed = 10f;
 
-	public float XSensitivity = 1f;
+	public float XSensitivity = .1f;
 	public float YSensitivity = 1f;
 	public bool clampVerticalRotation = true;
-	public float MinimumX = -90F;
-	public float MaximumX = 90F;
+	float MinimumX = -10F;
+	float MaximumX = 10F;
 	public bool smooth;
 	public float smoothTime = 5f;
 
 	private Quaternion characterTargetRot;
+	private Quaternion m_CameraTargetRot;
 
 	void Start(){
 		characterTargetRot = transform.localRotation;
+		m_CameraTargetRot = playerCamera.localRotation;
 	}
 
 	private bool Walking{
@@ -78,19 +81,19 @@ public class PlayerController : MonoBehaviour {
 
 		var pos = transform.localPosition;
 
-		if (Input.GetKeyDown(KeyCode.UpArrow)){
+		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)){
 			holdingUp = true;
 			holdingDown = false;
 		}
-		else if (Input.GetKeyDown(KeyCode.RightArrow)){
+		else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)){
 			holdingRight = true;
 			holdingLeft= false;
 		}
-		else if (Input.GetKeyDown(KeyCode.LeftArrow)){
+		else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)){
 			holdingLeft = true;
 			holdingRight = false;
 		}
-		else if (Input.GetKeyDown(KeyCode.DownArrow)){
+		else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)){
 			holdingDown = true;
 			holdingUp = false;
 		}
@@ -117,16 +120,16 @@ public class PlayerController : MonoBehaviour {
 			coolCamera.SetActive(!coolCamera.activeSelf);
 		}
 
-		if (Input.GetKeyUp(KeyCode.UpArrow)){
+		if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.W)){
 			holdingUp = false;
 		}
-		else if (Input.GetKeyUp(KeyCode.RightArrow)){
+		else if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.D)){
 			holdingRight = false;
 		}
-		else if (Input.GetKeyUp(KeyCode.LeftArrow)){
+		else if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.A)){
 			holdingLeft = false;
 		}
-		else if (Input.GetKeyUp(KeyCode.DownArrow)){
+		else if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S)){
 			holdingDown = false;
 		}
 		else if (Input.GetKeyUp(KeyCode.Q)){
@@ -172,17 +175,24 @@ public class PlayerController : MonoBehaviour {
 
 		characterTargetRot *= Quaternion.Euler (0f, yRot, 0f);
 
-		if(clampVerticalRotation)
-		//    m_CameraTargetRot = ClampXRotation (m_CameraTargetRot);
+
+		//m_CameraTargetRot *= Quaternion.Euler (-xRot, 0f, 0f);
+		var eulerAngles = m_CameraTargetRot.eulerAngles;
+		eulerAngles.x += xRot;
+		m_CameraTargetRot = Quaternion.Euler(eulerAngles);
+
+		if(clampVerticalRotation){
+		    //m_CameraTargetRot = ClampXRotation(m_CameraTargetRot);
+		}
 
 		if(smooth) {
 			transform.localRotation = Quaternion.Slerp (transform.localRotation, characterTargetRot,
 			smoothTime * Time.deltaTime);
-			//camera.localRotation = Quaternion.Slerp (camera.localRotation, m_CameraTargetRot,smoothTime * Time.deltaTime);
+			playerCamera.localRotation = Quaternion.Slerp (playerCamera.localRotation, m_CameraTargetRot,smoothTime * Time.deltaTime);
 		}
 		else {
 			transform.localRotation = characterTargetRot;
-			//    camera.localRotation = m_CameraTargetRot;
+			playerCamera.localRotation = m_CameraTargetRot;
 		}
 	}
 
