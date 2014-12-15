@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField] protected Animator animator;
 	[SerializeField] protected PlayerShoot playerShoot;
 	[SerializeField] protected GameObject coolCamera;
+	[SerializeField] protected Transform playerTorso;
 
 	private bool holdingUp,
 				 holdingDown,
@@ -21,6 +22,20 @@ public class PlayerController : MonoBehaviour {
 
 	private const float sideSpeed = 10f,
 						forwardSpeed = 10f;
+
+	public float XSensitivity = 1f;
+	public float YSensitivity = 1f;
+	public bool clampVerticalRotation = true;
+	public float MinimumX = -90F;
+	public float MaximumX = 90F;
+	public bool smooth;
+	public float smoothTime = 5f;
+
+	private Quaternion characterTargetRot;
+
+	void Start(){
+		characterTargetRot = transform.localRotation;
+	}
 
 	private bool Walking{
 		get{
@@ -58,6 +73,9 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void HandleInput(){
+
+		MouseInput();
+
 		var pos = transform.localPosition;
 
 		if (Input.GetKeyDown(KeyCode.UpArrow)){
@@ -132,20 +150,55 @@ public class PlayerController : MonoBehaviour {
 		Shooting = holdingShoot;
 
 		if (holdingLeft){
-			pos.z += Time.deltaTime * sideSpeed;
+			pos += Time.deltaTime * forwardSpeed * transform.forward;
 		}
 		else if (holdingRight){
-			pos.z -= Time.deltaTime * sideSpeed;
+			pos -= Time.deltaTime * forwardSpeed * transform.forward;
 		}
 
 		if (holdingUp){
-			pos.x += Time.deltaTime * forwardSpeed;
+			pos += Time.deltaTime * sideSpeed * transform.right;
 		}
 		else if (holdingDown){
-			pos.x -= Time.deltaTime * forwardSpeed;
+			pos -= Time.deltaTime * sideSpeed * transform.right;
 		}
 
 		transform.localPosition = pos;
+	}
+
+	void MouseInput(){
+		float yRot = Input.GetAxis("Mouse X") * XSensitivity;
+		float xRot = Input.GetAxis("Mouse Y") * YSensitivity;
+
+		characterTargetRot *= Quaternion.Euler (0f, yRot, 0f);
+
+		if(clampVerticalRotation)
+		//    m_CameraTargetRot = ClampXRotation (m_CameraTargetRot);
+
+		if(smooth) {
+			transform.localRotation = Quaternion.Slerp (transform.localRotation, characterTargetRot,
+			smoothTime * Time.deltaTime);
+			//camera.localRotation = Quaternion.Slerp (camera.localRotation, m_CameraTargetRot,smoothTime * Time.deltaTime);
+		}
+		else {
+			transform.localRotation = characterTargetRot;
+			//    camera.localRotation = m_CameraTargetRot;
+		}
+	}
+
+	Quaternion ClampXRotation(Quaternion q){
+		q.x /= q.w;
+		q.y /= q.w;
+		q.z /= q.w;
+		q.w = 1.0f;
+
+		float angleX = 2.0f * Mathf.Rad2Deg * Mathf.Atan (q.x);
+
+		angleX = Mathf.Clamp (angleX, MinimumX, MaximumX);
+
+		q.x = Mathf.Tan (0.5f * Mathf.Deg2Rad * angleX);
+
+		return q;
 	}
 
 }
